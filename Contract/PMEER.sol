@@ -1,11 +1,10 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.10;
 
 import './SafeMath.sol';
 
 contract Owned {
 
     address public owner;
-    address newOwner;
 
     modifier only(address _allowed) {
         require(msg.sender == _allowed);
@@ -17,12 +16,7 @@ contract Owned {
     }
 
     function transferOwnership(address _newOwner) only(owner) public {
-        newOwner = _newOwner;
-    }
-
-    function acceptOwnership() only(newOwner) public {
-        emit OwnershipTransferred(owner, newOwner);
-        owner = newOwner;
+        owner = _newOwner;
     }
 
     event OwnershipTransferred(address indexed _from, address indexed _to);
@@ -41,8 +35,8 @@ contract Token is Owned {
 
     event Transfer(address indexed _from, address indexed _to, uint _value);
     event Approval(address indexed _owner, address indexed _spender, uint _value);
-    event PToE(address indexed user, bytes indexed meerAddress, uint value);
-    event EToP(address indexed user, bytes indexed meerAddress, uint value);
+    event PToE(address indexed user, bytes20 indexed meerPubKey, uint value);
+    event EToP(address indexed user, bytes20 indexed meerPubKey, uint value);
 
     function transfer(address _to, uint _value) public returns (bool success) {
         require(_to != address(0));
@@ -85,18 +79,17 @@ contract Token is Owned {
         return allowed[_owner][_spender];
     }
 
-    function pToE(address _to, uint _amount, bytes memory _meerPubKey) public only(owner) returns(bool) {
+    function pToE(address _to, uint _amount, bytes20 _meerPubKey) public only(owner) returns(bool) {
         totalSupply = totalSupply.add(_amount);
         balances[_to] = balances[_to].add(_amount);
         emit PToE(_to, _meerPubKey, _amount);
         return true;
     }
     
-    function eToP(bytes memory _meerPubKey, uint _amount ) public returns(bool) {
+    function eToP(bytes20 _meerPubKey, uint _amount ) public returns(bool) {
         totalSupply = totalSupply.sub(_amount);
         balances[msg.sender] = balances[msg.sender].sub(_amount);
         emit EToP(msg.sender, _meerPubKey, _amount);
         return true;
     }
-
 }

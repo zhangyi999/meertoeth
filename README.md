@@ -11,6 +11,10 @@ string public name = "eQitmeer";
 string public symbol="ePMEER";
 ```
 
+## 合约地址
+
+Ropsten 网络：0x9c247a044Cb4973588931c3fBE80C66067E9A2b2
+
 ## PMEER 兑换 EMEER 方法
 
 ```js
