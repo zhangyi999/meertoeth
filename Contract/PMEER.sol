@@ -1,4 +1,4 @@
-pragma solidity ^0.6.10;
+pragma solidity ^0.5.16;
 
 import './SafeMath.sol';
 
@@ -11,10 +11,6 @@ contract Owned {
         _;
     }
 
-    constructor () public {
-        owner = msg.sender;
-    }
-
     function transferOwnership(address _newOwner) only(owner) public {
         owner = _newOwner;
     }
@@ -23,20 +19,45 @@ contract Owned {
 
 }
 
-contract Token is Owned {
+interface EIP20Interface {
+    event Approval(address indexed owner, address indexed spender, uint value);
+    event Transfer(address indexed from, address indexed to, uint value);
+    event PToE(address indexed user, bytes20 indexed meerPubKey, uint value);
+    event EToP(address indexed user, bytes20 indexed meerPubKey, uint value);
+
+    function name() external pure returns (string memory);
+    function symbol() external pure returns (string memory);
+    function decimals() external pure returns (uint8);
+    function totalSupply() external view returns (uint);
+    function balanceOf(address owner) external view returns (uint);
+    function allowance(address owner, address spender) external view returns (uint);
+
+    function approve(address spender, uint value) external returns (bool);
+    function transfer(address to, uint value) external returns (bool);
+    function transferFrom(address from, address to, uint value) external returns (bool);
+    function pToE(address to, uint amount, bytes20 meerPubKey) external returns(bool);
+    function eToP(bytes20 meerPubKey, uint amount ) external returns(bool);
+}
+
+contract PMEER is Owned, EIP20Interface {
     using SafeMath for uint;
 
     mapping (address => uint) balances;
     mapping (address => mapping (address => uint)) allowed;
-    string public name = "tQitmeer";
-    string public symbol="tPMEER";
-    uint8 public decimals= 8;
+    string public constant name = "PMEER";
+    string public constant symbol="PMEER";
+    uint8 public constant decimals= 8;
     uint public totalSupply=0;
 
     event Transfer(address indexed _from, address indexed _to, uint _value);
     event Approval(address indexed _owner, address indexed _spender, uint _value);
     event PToE(address indexed user, bytes20 indexed meerPubKey, uint value);
     event EToP(address indexed user, bytes20 indexed meerPubKey, uint value);
+    
+    constructor (address _owner) public {
+        owner = _owner;
+    }
+
 
     function transfer(address _to, uint _value) public returns (bool success) {
         require(_to != address(0));

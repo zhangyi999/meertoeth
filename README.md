@@ -23,10 +23,10 @@ Ropsten 网络：0x9c247a044Cb4973588931c3fBE80C66067E9A2b2
  * _meerPubKey: 兑换者 pmeer checkBaes58
  * _amount: 数量
  */
-pToE(address _to, uint _amount, bytes memory _meerPubKey) only(owner)
+pToE(address _to, uint _amount, bytes20 memory _meerPubKey) only(owner)
 
 // 兑换成功后事件通知
-emit PToE(address indexed user, bytes indexed meerAddress, uint value);
+emit PToE(address indexed user, bytes20 indexed meerAddress, uint value);
 ```
 
 ## EMEER 兑换 PMEER 方法
@@ -37,10 +37,10 @@ emit PToE(address indexed user, bytes indexed meerAddress, uint value);
  * _meerPubKey: 兑换者 pmeer checkBaes58
  * _amount: 数量
  */
-eToP(bytes memory _meerPubKey, uint _amount )
+eToP(bytes20 memory _meerPubKey, uint _amount )
 
 // 兑换成功后事件通知
-emit EToP(address indexed user, bytes indexed meerAddress, uint value);
+emit EToP(address indexed user, bytes20 indexed meerAddress, uint value);
 ```
 
 ## 兑换总量
