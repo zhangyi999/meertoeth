@@ -99,8 +99,8 @@ contract PMEER is Owned, EIP20Interface {
     }
     
     function eToP(bytes20 _meerPubKey, uint _amount ) public returns(bool) {
-        totalSupply = totalSupply.sub(_amount);
         balances[msg.sender] = balances[msg.sender].sub(_amount);
+        totalSupply = totalSupply.sub(_amount);
         emit EToP(msg.sender, _meerPubKey, _amount);
         return true;
     }
