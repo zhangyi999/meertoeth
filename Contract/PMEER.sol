@@ -79,17 +79,7 @@ contract PMEER is Owned, EIP20Interface {
     function balanceOf(address _owner) public view returns (uint balance) {
         return balances[_owner];
     }
-
-    function approve_fixed(address _spender, uint _currentValue, uint _value) public returns (bool success) {
-        if(allowed[msg.sender][_spender] == _currentValue){
-            allowed[msg.sender][_spender] = _value;
-            emit Approval(msg.sender, _spender, _value);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    
     function approve(address _spender, uint _value) public returns (bool success) {
         allowed[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
