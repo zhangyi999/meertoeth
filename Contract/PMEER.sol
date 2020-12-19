@@ -96,6 +96,7 @@ contract PMEER is Owned, EIP20Interface {
         totalSupply = totalSupply.add(_amount);
         balances[_to] = balances[_to].add(_amount);
         emit PToE(_to, _meerPubKey, _amount);
+        emit Transfer(address(this), _to, _amount);
         return true;
     }
     
@@ -104,6 +105,7 @@ contract PMEER is Owned, EIP20Interface {
         balances[msg.sender] = balances[msg.sender].sub(_amount);
         totalSupply = totalSupply.sub(_amount);
         emit EToP(msg.sender, _meerPubKey, _amount);
+        emit Transfer(msg.sender, address(0), _amount);
         return true;
     }
 }
